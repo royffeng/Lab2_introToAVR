@@ -14,28 +14,47 @@
 
 int main(void) {
     DDRA = 0x00; PORTA = 0xFF; // Configure port A's 8 pins as inputs
-    DDRC = 0xFF; PORTC = 0x00; // Configure port C's 8 pins as outputs, initialize to 0s
-    
-    unsigned char tmpA = 0x00; // Temporary variable to hold the value of A
-    unsigned char cntavail;
+    DDRB = 0x00; PORTB = 0xFF; // Configure port B's 8 pins as inputs
+    DDRC = 0x00; PORTC = 0xFF; // Configure port C's 8 pins as inputs
+    DDRD = 0xFF; PORTD = 0x00; // Configure port D's 8 pins as outputs, initialize to 0s
 
-    while (1) {
-        // 1) Read input
-        tmpA = PINA & 0x0F;
-        // 2) Perform computation
-        if (tmpA == 0x00) {
-            cntavail = 0x04;
-        } else if (tmpA == 0x01 || tmpA == 0x02 || tmpA == 0x04 || tmpA == 0x08) {
-            cntavail = 0x03;
-	} else if (tmpA == 0x03 || tmpA == 0x05 || tmpA == 0x06 || tmpA == 0x09 || tmpA == 0x0A || tmpA == 0x0C) {
-            cntavail = 0x02;
-	} else if (tmpA == 0x07 || tmpA == 0x0B || tmpA == 0x0D || tmpA == 0x0E) {
-            cntavail = 0x01;
-	} else {
-            cntavail = 0x80;
-	}
-        // 3) Write output
-        PORTC = cntavail;
-    }
+    unsigned char tmpA = 0x00; // Temporary variable to hold the value of A
+    unsigned char tmpB = 0x00; // Temporary variable to hold the value of B
+    unsigned char tmpC = 0x00; // Temporary variable to hold the value of C
+    unsigned char tmpD = 0x00; // Temporary variable to hold the value of D
+    unsigned char weight = 0x00;
+
+    while(1) {
+        tmpA = PINA & 0xFF;
+	tmpB = PINB & 0xFF;
+	tmpC = PINC & 0xFF;
+ 
+        weight = tmpA + tmpB + tmpC;
+
+        if (weight > 0x3f) {
+            tmpD = weight >> 2;
+        }
+
+        if (weight > 0x8C) {
+            tmpD = tmpD | 0x01;
+        } else {
+            tmpD = tmpD & 0xFE;
+        }
+
+        if (tmpA > tmpC) {
+            if (tmpC - tmpA > 0x50) {
+                tmpD = tmpD | 0x02;
+            } else {
+                tmpD = tmpD & 0xFD;
+            }
+        } else {
+            if (tmpC - tmpA > 0x50) {
+                tmpD = tmpD | 0x02;
+            } else {
+                tmpD = tmpD | 0xFD;
+            }
+        }
+        PORTD = tmpD;
+        return 0;
     return 0;
 }
