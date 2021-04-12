@@ -32,20 +32,27 @@ int main(void) {
 	tmpC = PINC & 0xFF;
         */
 
-        tmpD = 0;
+        tmpD = 0x00;
 
         weight = PINA + PINB + PINC;
 
         if (weight > 140) {
-            tmpD = 0x01;
+            tmpD = tmpD | 0x01;
         }
 
-        if (PINA - PINC > 80 || PINA - PINC < -80) {
-            tmpD = tmpD | 0x02;
+        if (PINA > PINC) {
+            if (PINA - PINC > 80) {
+                tmpD = tmpD | 0x02;
+            }
+        } else {
+            if (PINC - PINA > 80) {
+                tmpD = tmpD | 0x02;
+            }
         }
-        tmpD = ((weight & 0xF0) >> 2) | tmpD;
 
-        PORTD = tmpD;
+        weight = weight >> 2;
+
+        PORTD = tmpD | (weight);
     }
     return 0;
 }
