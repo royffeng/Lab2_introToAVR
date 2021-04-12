@@ -31,7 +31,7 @@ int main(void) {
  
         weight = tmpA + tmpB + tmpC;
 
-        if (weight > 0x3f) {
+        if (weight > 0x3F) {
             tmpD = weight >> 2;
         }
 

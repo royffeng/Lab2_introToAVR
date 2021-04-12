@@ -20,15 +20,13 @@ int main(void) {
     unsigned char tmpA = 0x00; // Temporary variable to hold the value of A
     while (1) {
         // 1) Read input
-        tmpA = PINA & 0x01;
+        tmpA = PINA & 0x03;
         // 2) Perform computation
         // if PA0 is 1, set PB1PB0 = 01, else = 10
         if (tmpA == 0x01) { // True if PA0 is 1
-            tmpB = (tmpB & 0xFC) | 0x01; // Sets tmpB to bbbbbb01
-                                         // (clear rightmost 2 bits, then set to 01)
+            tmpB = 0x01; // Sets tmpB to 00000001
         } else {
-            tmpB = (tmpB & 0xFC) | 0x02; // Sets tmpB to bbbbbb10
-                                           // (clear rightmost 2 bits, then set to 10)
+            tmpB = 0x002; // Sets tmpB to 00000000
         }
         // 3) Write output
         PORTB = tmpB;
