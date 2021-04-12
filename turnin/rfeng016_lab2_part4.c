@@ -42,7 +42,7 @@ int main(void) {
         }
 
         if (tmpA > tmpC) {
-            if (tmpC - tmpA > 0x50) {
+            if (tmpA - tmpC > 0x50) {
                 tmpD = tmpD | 0x02;
             } else {
                 tmpD = tmpD & 0xFD;

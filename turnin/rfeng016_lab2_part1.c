@@ -26,7 +26,7 @@ int main(void) {
         if (tmpA == 0x01) { // True if PA0 is 1
             tmpB = 0x01; // Sets tmpB to 00000001
         } else {
-            tmpB = 0x002; // Sets tmpB to 00000000
+            tmpB = 0x00; // Sets tmpB to 00000000
         }
         // 3) Write output
         PORTB = tmpB;
