@@ -17,42 +17,39 @@ int main(void) {
     DDRB = 0x00; PORTB = 0xFF; // Configure port B's 8 pins as inputs
     DDRC = 0x00; PORTC = 0xFF; // Configure port C's 8 pins as inputs
     DDRD = 0xFF; PORTD = 0x00; // Configure port D's 8 pins as outputs, initialize to 0s
-    /*
-    unsigned char tmpA = 0x00; // Temporary variable to hold the value of A
-    unsigned char tmpB = 0x00; // Temporary variable to hold the value of B
-    unsigned char tmpC = 0x00; // Temporary variable to hold the value of C
-    */
+
+    unsigned char tmpA; // Temporary variable to hold the value of A
+    unsigned char tmpB; // Temporary variable to hold the value of B
+    unsigned char tmpC; // Temporary variable to hold the value of C
+
     unsigned char tmpD = 0x00; // Temporary variable to hold the value of D
     unsigned char weight = 0x00;
 
     while(1) {
-        /*
-        tmpA = PINA & 0xFF;
-	tmpB = PINB & 0xFF;
-	tmpC = PINC & 0xFF;
-        */
-
+        tmpA = PINA;
+	tmpB = PINB;
+	tmpC = PINC;
         tmpD = 0x00;
 
-        weight = PINA + PINB + PINC;
+        weight = tmpA + tmpB + tmpC;
 
         if (weight > 140) {
             tmpD = tmpD | 0x01;
         }
 
-        if (PINA > PINC) {
-            if (PINA - PINC > 80) {
+        if (tmpA > tmpC) {
+            if (tmpA - tmpC > 80) {
                 tmpD = tmpD | 0x02;
             }
         } else {
-            if (PINC - PINA > 80) {
+            if (tmpC - tmpA > 80) {
                 tmpD = tmpD | 0x02;
             }
         }
 
         weight = weight >> 2;
 
-        PORTD = tmpD | (weight);
+        PORTD = tmpD | weight;
     }
     return 0;
 }
